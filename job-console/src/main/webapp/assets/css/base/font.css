@@ -1,0 +1,183 @@
+.font-number-xs {
+	color: #a0a0a0;
+	font-size: 8px;
+}
+
+.font-number-s {
+	color: #a0a0a0;
+	font-size: 12px;
+}
+
+.font-number-m {
+	color: #a0a0a0;
+	font-size: 16px;
+}
+
+.font-number-l {
+	color: #a0a0a0;
+	font-size: 20px;
+}
+
+.font-number-xl {
+	color: #a0a0a0;
+	font-size: 24px;
+}
+
+.font-number-xxl {
+	color: #0096ff;
+	font-size: 72px;
+}
+
+.font-des-xs {
+	color: #a0a0a0;
+	font-size: 8px;
+}
+
+.font-des-s {
+	color: #a0a0a0;
+	font-size: 12px;
+}
+
+.font-des-m {
+	color: #a0a0a0;
+	font-size: 16px;
+}
+
+.font-des-l {
+	color: #a0a0a0;
+	font-size: 20px;
+}
+
+.font-des-xl {
+	color: #a0a0a0;
+	font-size: 24px;
+}
+
+.font-unit-xs {
+	color: #a0a0a0;
+	font-size: 8px;
+}
+
+.font-unit-s {
+	color: #a0a0a0;
+	font-size: 12px;
+}
+
+.font-unit-m {
+	color: #a0a0a0;
+	font-size: 16px;
+}
+
+.font-unit-l {
+	color: #a0a0a0;
+	font-size: 20px;
+}
+
+.font-unit-xl {
+	color: #a0a0a0;
+	font-size: 24px;
+}
+
+.font-title-xs {
+	color: #a0a0a0;
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.font-title-s {
+	font-size: 16px;
+	font-weight: 600;
+}
+
+.font-title-m {
+	font-size: 20px;
+	font-weight: 600;
+}
+
+.font-title-l {
+	font-size: 24px;
+	font-weight: 600;
+}
+.font-title-xl {
+	color: #a0a0a0;
+	font-size: 32px;
+	font-weight: 600;
+}
+.font-title-xxl {
+	color: #a0a0a0;
+	font-size: 48px;
+	font-weight: 600;
+}
+
+
+.font-s{
+	font-size: 10px;
+}
+.font-m{
+	font-size: 16px;
+}
+.font-m-v2{
+	font-size: 14px;
+}
+.font-hm{
+	font-size: 15px;
+}
+.font-hm2{
+	font-size: 14px;
+}
+.font-xm{
+	font-size: 16px;
+}
+.font-l{
+	font-size: 18px;
+}
+.font-hl{
+	font-size: 20px;
+}
+.font-ml{
+	font-size: 24px;
+}
+.font-xl{
+	font-size: 22px;
+}
+.font-xxl{
+	font-size: 26px;
+}
+.font-xxxl{
+	font-size: 30px;
+}
+.font-xxxxl{
+	font-size: 34px;
+}
+.font-xxxxxl{
+	font-size: 38px;
+}
+.font-xxxxxxl{
+	font-size: 42px;
+}
+.font-xxxxxxxl{
+	font-size: 46px;
+}
+.font-xxxxxxxl{
+	font-size: 52px;
+}
+.font-accordion{
+	font-size:	55px;
+}
+
+.font-nxl{
+	font-size: 70px;
+}
+
+.font-weight-bold{
+	font-weight: bold;
+}
+
+.font-weight-normal{
+	font-weight: normal;
+}
+
+.font-arrow{
+	font-family: "微软雅黑";
+	font-weight: bold;
+}

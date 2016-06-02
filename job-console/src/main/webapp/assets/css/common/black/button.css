@@ -1,0 +1,186 @@
+.ui-button * {
+	margin: 0;
+	padding: 0
+}
+
+.ui-button {
+	display: inline-block;
+	*display: inline;
+	text-align: center;
+	text-decoration: none;
+	vertical-align: middle;
+	cursor: pointer;
+	font-size: 14px;
+	font-family: inherit;
+	font-weight: 700;
+	border-radius: 2px;
+	padding: 0 20px;
+	*zoom: 1;
+	*overflow: visible;
+	background-image: none
+}
+
+.ui-button .ui-button-text {
+	background: 0 0;
+	padding: 0;
+	height: auto;
+	line-height: auto
+}
+
+.ui-button:hover {
+	text-decoration: none;
+	background-image: none
+}
+
+input.ui-button-text,button.ui-button-text {
+	*vertical-align: top
+}
+
+.ui-button:active {
+	position: relative;
+	top: 1px;
+	box-shadow: 1px 1px 3px #999 inset
+}
+
+.ui-button-lnormal,.ui-button-mnormal,.ui-button-snormal {
+	color: #fff;
+	/* border: 1px solid #fff; */
+	background-color: #0096ff;
+}
+
+.ui-button-lnormal:hover,.ui-button-mnormal:hover,.ui-button-snormal:hover
+	{
+	background-color: #0096ff;
+}
+
+a.ui-button-lnormal,a.ui-button-mnormal,a.ui-button-snormal,a.ui-button-lnormal:hover,a.ui-button-mnormal:hover,a.ui-button-snormal:hover,a.ui-button-lnormal:active,a.ui-button-mnormal:active,a.ui-button-snormal:active
+	{
+	color: #fff
+}
+
+.ui-button-lnormal {
+	line-height: 32px;
+	height: 32px
+}
+
+.ui-button-mnormal {
+	line-height: 28px;
+	height: 28px
+}
+
+.ui-button-snormal {
+	padding: 0 12px;
+	line-height: 24px;
+	height: 24px;
+	font-size: 12px
+}
+
+a.ui-button-lnormal {
+	line-height: 30px;
+	height: 30px
+}
+
+a.ui-button-mnormal {
+	line-height: 26px;
+	height: 26px
+}
+
+a.ui-button-snormal {
+	line-height: 22px;
+	height: 22px
+}
+
+.ui-button-lcancle,.ui-button-mcancle,.ui-button-scancle {
+	border: 1px solid #afafaf;
+	background-color: #f3f3f3;
+	color: #777
+}
+
+.ui-button-lcancle:hover,.ui-button-mcancle:hover,.ui-button-scancle:hover
+	{
+	border: 1px solid #8e8e8e;
+	background-color: #fcfbfb;
+	color: #676d70
+}
+
+a.ui-button-lcancle,a.ui-button-mcancle,a.ui-button-scancle,a.ui-button-lcancle:active,a.ui-button-mcancle:active,a.ui-button-scancle:active
+	{
+	color: #777
+}
+
+a.ui-button-lcancle:hover,a.ui-button-mcancle:hover,a.ui-button-scancle:hover
+	{
+	color: #676d70
+}
+
+.ui-button-lcancle {
+	line-height: 32px;
+	height: 32px
+}
+
+.ui-button-mcancle {
+	line-height: 28px;
+	height: 28px
+}
+
+.ui-button-scancle {
+	line-height: 24px;
+	height: 24px;
+	padding: 0 12px;
+	font-size: 12px
+}
+
+a.ui-button-lcancle {
+	line-height: 30px;
+	height: 30px
+}
+
+a.ui-button-mcancle {
+	line-height: 26px;
+	height: 26px
+}
+
+a.ui-button-scancle {
+	line-height: 22px;
+	height: 22px
+}
+
+.ui-button-ldisable,.ui-button-mdisable,.ui-button-sdisable {
+	color: #999;
+	border: 0;
+	background: #cacccd;
+	cursor: default
+}
+
+a.ui-button-ldisable,a.ui-button-mdisable,a.ui-button-sdisable,a.ui-button-ldisable:active,a.ui-button-mdisable:active,a.ui-button-sdisable:active,a.ui-button-ldisable:hover,a.ui-button-mdisable:hover,a.ui-button-sdisable:hover
+	{
+	color: #999
+}
+
+.ui-button-ldisable {
+	line-height: 32px;
+	height: 32px
+}
+
+.ui-button-mdisable {
+	line-height: 28px;
+	height: 28px
+}
+
+.ui-button-sdisable {
+	line-height: 24px;
+	height: 24px;
+	padding: 0 12px;
+	font-size: 12px
+}
+
+.ui-button-ldisable,.ui-button-mdisable,.ui-button-sdisable {
+	cursor: default !important
+}
+
+.ui-button-ldisable:active,.ui-button-mdisable:active,.ui-button-sdisable:active
+	{
+	position: static;
+	top: 0;
+	box-shadow: none
+}

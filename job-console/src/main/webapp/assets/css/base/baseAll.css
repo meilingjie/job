@@ -1,0 +1,42 @@
+@IMPORT url("base.css");
+
+@IMPORT url("iconfont.css");
+
+@IMPORT url("grid.css");
+
+@IMPORT url("font.css");
+/* 
+::-webkit-scrollbar-track-piece {
+	background-color: rbga(255, 255, 255, 0.1);
+	-webkit-border-radius: 0;
+}
+
+::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+	height: 50px;
+	background-color: rgba(0, 143, 212, 0.6);
+	-webkit-border-radius: 4px;
+	outline: 0px solid #fff;
+	outline-offset: -2px;
+	border: 0px solid #fff;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	height: 50px;
+	background-color: rgba(0, 143, 212, 1);
+	-webkit-border-radius: 4px;
+}
+
+html {
+	scrollbar-base-color: rgba(255, 255, 255, 0);
+	scrollbar-3dlight-color: rgba(0, 143, 212, 0.6);
+	scrollbar-highlight-color: rgba(0, 143, 212, 0.6);
+	scrollbar-track-color: rgba(0, 143, 212, 0);
+	scrollbar-arrow-color: rgba(0, 143, 212, 0);
+	scrollbar-shadow-color: rgba(255, 255, 255, 0);
+	scrollbar-dark-shadow-color: rgba(255, 255, 255, 0);
+} */

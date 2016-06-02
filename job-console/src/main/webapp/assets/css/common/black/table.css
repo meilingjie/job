@@ -1,0 +1,135 @@
+.ie10 .ui-table{
+	border: 1px solid #000;
+	border-collapse: collapse;
+	border-spacing:0;
+	width: 100%;
+	font-size: 18px;
+	text-align: left;
+}
+
+.ui-table {	
+	border: 1px solid rgb(220, 210, 210); 	
+	border-collapse: collapse;
+	border-spacing:0;
+	width: 100%;
+	font-size: 18px;
+	text-align: left;
+}
+
+.ui-table tr:nth-child(even),.ui-table-split,.ui-table-hover {
+	/* background-color: #FBFBFB */
+	
+}
+
+.ui-table tr {
+	color: #262626
+}
+
+.ui-table .ui-table-trselect td:first-child {
+	border-left-color: #0096ff;
+	border-left-style: solid;
+}
+
+.ui-table .ui-table-trselect td:last-child {
+	border-right-color: #0096ff;
+	border-right-style: solid;
+}
+
+.ui-table .ui-table-trselect td {
+	border-top-color: #0096ff;
+	border-bottom-color: #0096ff;
+	border-top-style: solid;
+	border-bottom-style: solid;
+}
+
+.ui-table thead, .ui-table tfoot{
+	background-color: rgb(235,253,255);
+}
+
+.ui-table thead tr {
+	color: #262626
+}
+
+.ui-table thead {
+	color: #a0a0a0;
+	/* background-color: #F6F6F6;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F8F8F8',
+		endColorstr='#F2F2F2');
+	background: -webkit-gradient(linear, left top, left bottom, from(#F8F8F8),
+		to(#F2F2F2));
+	background: -moz-linear-gradient(top, #F8F8F8, #F2F2F2);
+	background: -o-linear-gradient(top, #F8F8F8, #F2F2F2);
+	background: linear-gradient(top, #F8F8F8, #F2F2F2) */
+}
+
+.ui-table th {
+	padding: 7px 9px;
+	border: 1px inset #f2f2f2;
+	text-align: center;
+}
+
+.ui-table > tbody > tr:nth-child(odd){
+	background-color:rgb(255,255,255);
+}
+
+.ui-table > tbody > tr:nth-child(even){
+	background-color:rgb(252,253,255);
+}
+
+.ui-table tbody tr:hover {
+	background-color: rgb(235,253,255);
+}
+
+.ie10 .ui-table td {
+	padding: 7px 8px 7px;
+	border: 1px solid #000;
+}
+
+.ui-table td {
+	padding: 8px 9px 7px;
+	border: 1px inset #f2f2f2;
+}
+
+.ui-table th {
+	padding: 7px 9px
+}
+
+.ui-table tfoot td {
+	padding-top:8px;
+	padding-bottom:8px;
+	border-bottom: 0
+}
+
+.ui-table-noborder,.ui-table-noborder td,.ui-table-noborder tr,.ui-table-noborder th
+	{
+	border: 0;
+	outline: 0
+}
+
+.ui-table-noborder .ui-table-split,.ui-table-noborder .ui-table-hover {
+	/* background-color: #f7f7f7 */
+	
+}
+
+.ui-table-inbox {
+	border: 0;
+	outline: 0
+}
+
+/* if use following css,after set table-style "table-layout: fixed;" */
+.ui-table > .autocut {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	-o-text-overflow: ellipsis;
+/* 	-icab-text-overflow: ellipsis;
+	-khtml-text-overflow: ellipsis; */
+	-moz-text-overflow: ellipsis;
+	-webkit-text-overflow: ellipsis;
+}
+
+.ui-table > .autocut:hover {
+	overflow: visible;
+	white-space: normal;
+	word-wrap: break-word;
+}

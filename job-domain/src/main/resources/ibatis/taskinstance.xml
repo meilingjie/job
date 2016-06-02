@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.leo.job.model.TaskInstance">
+
+	<insert id="insert" useGeneratedKeys="true" parameterType="com.leo.job.model.TaskInstance">
+		<selectKey keyProperty="id" order="AFTER" resultType="Long">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into cn_task_instance (taskDefId, taskCode, lastDoneTime, nextRunTime, schPattern, autoFlag, taskType, privateFlag, notifyMode)
+		values (#{taskDefId,jdbcType=INTEGER}, #{taskCode,jdbcType=VARCHAR}, #{lastDoneTime,jdbcType=TIMESTAMP}, #{nextRunTime,jdbcType=TIMESTAMP},
+		#{schPattern,jdbcType=VARCHAR}, #{autoFlag,jdbcType=TINYINT}, #{taskType,jdbcType=TINYINT}, #{privateFlag,jdbcType=TINYINT}, #{notifyMode,jdbcType=TINYINT})
+	</insert>
+
+	<select id="queryTaskInstanceByTaskDefId" resultType="com.leo.job.model.TaskInstance" parameterType="Long" >
+		select *
+		from cn_task_instance where taskDefId = #{taskDefId,jdbcType=INTEGER}
+	</select>
+
+	<select id="queryAllTaskInstances" resultType="com.leo.job.model.TaskInstance" >
+		select * from cn_task_instance
+	</select>
+
+	<select id="queryTaskInstanceById" resultType="com.leo.job.model.TaskInstance" parameterType="Long" >
+		select *
+		from cn_task_instance where id = #{id,jdbcType=INTEGER}
+	</select>
+	
+	<update id="updateTaskInstance" parameterType="com.leo.job.model.TaskInstance" >
+		update cn_task_instance
+		<set>
+			<if test="taskDefId != null">
+				taskDefId = #{taskDefId,jdbcType=INTEGER},
+			</if>
+			<if test="taskCode != null">
+				taskCode = #{taskCode,jdbcType=VARCHAR},
+			</if>
+			<if test="lastDoneTime != null">
+				lastDoneTime = #{lastDoneTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="nextRunTime != null">
+				nextRunTime = #{nextRunTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="schPattern != null">
+				schPattern = #{schPattern,jdbcType=VARCHAR},
+			</if>
+			<if test="autoFlag != null">
+				autoFlag = #{autoFlag,jdbcType=TINYINT},
+			</if>
+			<if test="taskType != null">
+				taskType = #{taskType,jdbcType=TINYINT},
+			</if>
+			<if test="privateFlag != null">
+				privateFlag = #{privateFlag,jdbcType=TINYINT},
+			</if>
+			<if test="notifyMode != null">
+				notifyMode = #{notifyMode,jdbcType=TINYINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<update id="updateTaskQueue" parameterType="com.leo.job.model.TaskInstance" >
+		update cn_task_instance SET lastDoneTime = #{lastDoneTime,jdbcType=TIMESTAMP} WHERE taskCode = #{taskCode,jdbcType=VARCHAR}
+	</update>
+
+	<delete id="deleteTaskInstanceById" parameterType="Long" >
+		delete from cn_task_instance where id = #{id,jdbcType=INTEGER}
+	</delete>
+</mapper>

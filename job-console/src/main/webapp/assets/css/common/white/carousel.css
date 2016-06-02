@@ -1,0 +1,11 @@
+.ui-carousels {
+	
+}
+
+.ui-carousel {
+	display: none;
+}
+
+.ui-carousel-current {
+	display: block;
+}

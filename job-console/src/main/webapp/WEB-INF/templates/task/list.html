@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.thymeleaf.org ">
+<head>
+    <meta http-equiv="Cache-Control" content="no-store"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="qnvip-task"/>
+    <link rel="stylesheet" type="text/css" media="all" href="/assets/css/base/baseAll.css" />
+    <link rel="stylesheet" type="text/css" media="all" href="/assets/css/common/black/tab.css" />
+    <link rel="stylesheet" type="text/css" media="all" href="/assets/css/common/black/table.css" />
+    <link rel="stylesheet" type="text/css" media="all" href="/assets/css/common/black/box.css" />
+    <link rel="stylesheet" type="text/css" media="all" href="/assets/css/common/black/ui.css" />
+    <link rel="stylesheet" media="screen" href="/assets/js/module/bootstrap/css/bootstrap.css" />
+    <script type="text/javascript" src="/assets/js/base/jquery.js"></script>
+    <script type="text/javascript" src="/assets/js/module/cookie/jquery.cookie.js"></script>
+    <script type="text/javascript" src="/assets/js/module/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" media="all" href="/assets/js/module/msg/default.css" />
+    <script type="text/javascript" src="/assets/js/module/msg/jquery.msg.js"></script>
+    <link rel="stylesheet" type="text/css" media="all" href="/assets/js/module/dialog/white/default.css" />
+    <script type="text/javascript" src="/assets/js/module/dialog/jquery.dialog.js"></script>
+    <title>qnvip-task</title>
+    <style type="text/css">
+
+    </style>
+    <script type="text/javascript" >
+        Date.prototype.Format = function(fmt) {
+            var o = {
+                "M+" : this.getMonth()+1,                 //月份
+                "d+" : this.getDate(),                    //日
+                "h+" : this.getHours(),                   //小时
+                "m+" : this.getMinutes(),                 //分
+                "s+" : this.getSeconds(),                 //秒
+                "q+" : Math.floor((this.getMonth()+3)/3), //季度
+                "S"  : this.getMilliseconds()             //毫秒
+            };
+            if(/(y+)/.test(fmt))
+                fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+            for(var k in o)
+                if(new RegExp("("+ k +")").test(fmt))
+                    fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+            return fmt;
+        }
+
+        var webSocket =
+                new WebSocket('ws://localhost:8081/realTimeMonitor');
+
+        webSocket.onerror = function(event) {
+            onError(event)
+        };
+
+        webSocket.onopen = function(event) {
+            onOpen(event)
+        };
+
+        webSocket.onmessage = function(event) {
+            onMessage(event)
+        };
+
+        function onMessage(event) {
+            var taskInstances = $.parseJSON(event.data);
+            parseTaskInstances(taskInstances);
+        }
+
+        function onOpen(event) {
+            webSocket.send('client is connecting...');
+        }
+
+        function onError(event) {
+            alert(event.data);
+        }
+
+        function parseTaskInstances(taskInstances) {
+            for(var i in taskInstances){
+                var ts = taskInstances[i];
+                var obj = $("#taskId" + ts.id).parent();
+                obj.find(".lastDoneTime").text(new Date(ts.lastDoneTime).Format("yyyy-MM-dd hh:mm:ss"));
+                obj.find(".nextRunTime").text(new Date(ts.nextRunTime).Format("yyyy-MM-dd hh:mm:ss"));
+            }
+        }
+
+        $(function() {
+            $("#reboot").click(function(){
+                $.ajax({
+                    url:'/job/reboot',
+                    success:function(data){
+                        alert("reboot success!");
+                    }
+                });
+            });
+
+            $("#addTaskDef").click(function(){
+                $("#taskDefDialog").dialog("open", {
+                    title : "add/edit taskDef"
+                }, function() {
+                });
+            });
+
+            $(".editTaskParam").click(function(){
+                var taskId = $(this).parent().parent().find(".taskId").text();
+                $("#taskInsIdHidden").val(taskId);
+                $("#taskParamTable tbody").empty();
+                $("#taskParamDialog").dialog("open", {
+                    title : "add/edit taskParam"
+                }, function() {
+                    $.ajax({
+                        type: "POST",
+                        url: "/job/findTaskParamValuesByTaskInsId",
+                        data: {
+                            taskInsId : taskId
+                        },
+                        success: function(data){
+                            for(var index in data) {
+                                var param = data[index];
+                                var strTD = '<tr><td><input class="taskParamId" type="hidden" value="'+param.id+'" /><input readonly="readonly" class="form-control paramName" value="'+param.paramName+'" type="text" name="paramName" /></td><td><input readonly="readonly" class="form-control paramVal" value="'+param.paramVal+'" type="text" name="paramVal" /></td><td><button type="button" class="btn btn-default delTaskParam">del</button><button type="button" class="btn btn-default editTaskParam">edit</button><button type="button" class="btn btn-default saveTaskParam">save</button></td></tr>';
+                                $("#taskParamTable tbody").append(strTD);
+                            }
+                        }
+                    });
+                    initTaskParam();
+                });
+            });
+
+            $("#addTaskInstance").click(function(){
+                $("#id").val("");
+                $("#taskDefId").val("");
+                $("#taskCode").val("");
+                $("#schPattern").val("");
+                $("#taskType").val("");
+                $("#autoFlag").val("");
+                $("#taskInstanceDialog").dialog("open", {
+                    title : "add/edit taskInstance"
+                }, function() {
+                });
+            });
+
+            $(".delTaskInstance").click(function(){
+                var id = $(this).parent().parent().find(".taskId").text();
+                window.location.href = "/job/deleteTaskIns?id=" + id;
+            });
+
+            $(".editTaskInstance").click(function(){
+                var id = $(this).parent().parent().find(".taskId").text();
+                var taskDefId = $(this).parent().parent().find(".taskDefId").text();
+                var taskCode = $(this).parent().parent().find(".taskCode").text();
+                var schPattern = $(this).parent().parent().find(".schPattern").text();
+                var taskType = $(this).parent().parent().find(".taskType").text();
+                var autoFlag = $(this).parent().parent().find(".autoFlag").text();
+
+                $("#id").val(id);
+                $("#taskDefId").val(taskDefId);
+                $("#taskCode").val(taskCode);
+                $("#schPattern").val(schPattern);
+                $("#taskType").val(taskType);
+                $("#autoFlag").val(autoFlag);
+
+                $("#taskInstanceDialog").dialog("open", {
+                    title : "add/edit taskInstance"
+                }, function() {
+                });
+            });
+
+            $("#addTaskParam").click(function(){
+                var strTD = '<tr><td><input class="taskParamId" type="hidden" /><input class="form-control paramName" type="text" name="paramName" /></td><td><input class="form-control paramVal" type="text" name="paramVal" /></td><td><button type="button" class="btn btn-default delTaskParam">del</button><button type="button" class="btn btn-default editTaskParam">edit</button><button type="button" class="btn btn-default saveTaskParam">save</button></td></tr>';
+                $("#taskParamTable tbody").append(strTD);
+                initTaskParam();
+            });
+
+        });
+    function initTaskParam(){
+        $("#taskParamDialog").off('click',".saveTaskParam").on('click',".saveTaskParam",function(){
+            var taskId = $("#taskInsIdHidden").val();
+            var obj = $(this).parent().parent();
+            var paramName = obj.find(".paramName").val();
+            var paramVal = obj.find(".paramVal").val();
+            var id = obj.find(".taskParamId").val();
+            $.ajax({
+                type: "POST",
+                url: "/job/saveOrUpdateTaskParam",
+                data: {
+                    paramName : paramName,
+                    paramVal : paramVal,
+                    id : id,
+                    taskInsId : taskId
+                },
+                success: function(msg){
+                    if (msg.status == "SUCCESS") {
+                        obj.find("input").attr("readonly", "readonly");
+                        if (id == "") {
+                            obj.find(".taskParamId").val(msg.taskParamId);
+                        }
+                    } else {
+                        alert("operate failed");
+                    }
+                }
+            });
+        });
+        $("#taskParamDialog").off('click',".editTaskParam").on('click',".editTaskParam",function(){
+            $(this).parent().parent().find("input").removeAttr("readonly");
+        });
+        $("#taskParamDialog").off('click',".delTaskParam").on('click',".delTaskParam",function(){
+            var taskId = $("#taskInsIdHidden").val();
+            var obj = $(this).parent().parent();
+            var id = obj.find(".taskParamId").val();
+            $.ajax({
+                type: "POST",
+                url: "/job/deleteTaskParam",
+                data: {
+                    id : id,
+                    taskInsId : taskId
+                },
+                success: function(msg){
+                    if (msg.status == "SUCCESS") {
+                        obj.remove();
+                    } else {
+                        alert("operate failed");
+                    }
+                }
+            });
+        });
+    }
+    </script>
+</head>
+<body>
+<h1 align="center">QNVIP Task Scheduling Center</h1>
+<div class="col-sm-2"><button type="button" id="reboot" class="btn btn-default">reboot</button></div>
+<div class="col-sm-2"><button type="button" id="addTaskDef" class="btn btn-default">addTaskDef</button></div>
+<div class="col-sm-2"><button type="button" id="addTaskInstance" class="btn btn-default">addTaskInstance</button></div>
+<div style="clear: both;"></div>
+<br />
+<table class="ui-table font-hl">
+    <thead>
+    <tr>
+        <td>id</td>
+        <td>taskName</td>
+        <td>algorithm</td>
+    </tr>
+    </thead>
+    <tbody th:if="${not #lists.isEmpty(taskDefList)}">
+    <tr th:each="item,state:${taskDefList}">
+        <td th:text="${item.id}"></td>
+        <td th:text="${item.taskName}"></td>
+        <td th:text="${item.algorithm}"></td>
+    </tr>
+    </tbody>
+</table>
+<br />
+<table class="ui-table font-hl taskInstanceList">
+    <thead>
+    <tr>
+        <td>id</td>
+        <td>taskDefId</td>
+        <td>taskCode</td>
+        <td>lastDoneTime</td>
+        <td>nextRunTime</td>
+        <td>schPattern</td>
+        <td>autoFlag</td>
+        <td>taskType</td>
+        <td>privateFlag</td>
+        <td>notifyMode</td>
+        <td>operate</td>
+    </tr>
+    </thead>
+    <tbody th:if="${not #lists.isEmpty(taskList)}">
+    <tr th:each="item,state:${taskList}">
+        <td class="taskId" th:text="${item.id}" th:attr="id=taskId+${item.id}"></td>
+        <td class="taskDefId" th:text="${item.taskDefId}"></td>
+        <td class="taskCode" th:text="${item.taskCode}"></td>
+        <td class="lastDoneTime" th:text="${#dates.format(item.lastDoneTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+        <td class="nextRunTime" th:text="${#dates.format(item.nextRunTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+        <td class="schPattern" th:text="${item.schPattern}"></td>
+        <td class="autoFlag" th:text="${item.autoFlag}"></td>
+        <td class="taskType" th:text="${item.taskType}"></td>
+        <td class="privateFlag" th:text="${item.privateFlag}"></td>
+        <td class="notifyMode" th:text="${item.notifyMode}"></td>
+        <td>
+            <button type="button" class="btn btn-default editTaskInstance">edit</button>
+            <button type="button" class="btn btn-default delTaskInstance">delete</button>
+            <button type="button" class="btn btn-default editTaskParam">editJobParam</button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<div id="taskDefDialog" style="display: none; height: 200px;">
+    <form id="taskDefForm" action="/job/saveOrUpdateTaskDef">
+        <div class="form-group">
+            <label>taskName:</label>
+            <input type="text" class="form-control" id="taskName" name="taskName" placeholder="taskName" />
+        </div>
+        <div class="form-group">
+            <label>algorithm(The service name corresponding specific implementers):</label>
+            <input type="text" class="form-control" id="algorithm" name="algorithm" placeholder="algorithm" />
+        </div>
+        <div class="form-group">
+            <button type="submit" id="saveTaskDef" class="btn btn-default">submit</button>
+        </div>
+    </form>
+</div>
+<div id="taskInstanceDialog" style="display: none; height: 450px;">
+    <form id="taskInstanceForm" action="/job/saveOrUpdateTaskIns">
+        <div class="form-group">
+            <label>taskDefId:</label>
+            <input type="text" class="form-control" id="taskDefId" name="taskDefId" placeholder="taskDefId" />
+        </div>
+        <div class="form-group">
+            <label>taskCode:</label>
+            <input type="text" class="form-control" id="taskCode" name="taskCode" placeholder="taskCode" />
+        </div>
+        <div class="form-group">
+            <label>schPattern:</label>
+            <input type="text" class="form-control" id="schPattern" name="schPattern" placeholder="schPattern" />
+        </div>
+        <div class="form-group">
+            <label>taskType(1: pos ...):</label>
+            <input type="text" class="form-control" id="taskType" name="taskType" placeholder="taskType" />
+        </div>
+        <div class="form-group">
+            <label>autoFlag:</label>
+            <div>
+                manual <input type="radio" value="0" name="autoFlag" />
+                auto <input type="radio" value="1" name="autoFlag" checked="checked" />
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="hidden" id="id" name="id" />
+            <button type="submit" id="saveTaskInstance" class="btn btn-default">submit</button>
+        </div>
+    </form>
+</div>
+<div id="taskParamDialog" style="display: none; height: 400px;overflow-y: auto;">
+    <input type="hidden" id="taskInsIdHidden" />
+    <button type="button" id="addTaskParam" class="btn btn-default">add</button>
+    <table id="taskParamTable" class="ui-table font-hl">
+        <thead>
+            <tr>
+                <td>paramName</td>
+                <td>paramVal</td>
+                <td>operate</td>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
+

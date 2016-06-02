@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.leo.job.model.TaskError">
+	<resultMap id="BaseResultMap" type="com.leo.job.model.TaskError">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="exceptionInfo" property="exceptionInfo" jdbcType="VARCHAR" />
+		<result column="runTime" property="runTime" jdbcType="TIMESTAMP" />
+		<result column="failTime" property="failTime" jdbcType="TIMESTAMP" />
+		<result column="taskInsId" property="taskInsId" jdbcType="INTEGER" />
+		<result column="exceptionType" property="exceptionType" jdbcType="TINYINT" />
+		<result column="recoverFlag" property="recoverFlag" jdbcType="TINYINT" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<update id="updateTaskError" parameterType="com.leo.job.model.TaskError" >
+		update cn_task_error
+		<set>
+			<if test="exceptionInfo != null">
+				exceptionInfo = #{exceptionInfo,jdbcType=VARCHAR},
+			</if>
+			<if test="runTime != null">
+				runTime = #{runTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="failTime != null">
+				failTime = #{failTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="taskInsId != null">
+				taskInsId = #{taskInsId,jdbcType=INTEGER},
+			</if>
+			<if test="exceptionType != null">
+				exceptionType = #{exceptionType,jdbcType=TINYINT},
+			</if>
+			<if test="recoverFlag != null">
+				recoverFlag = #{recoverFlag,jdbcType=TINYINT},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<insert id="insert" useGeneratedKeys="true" parameterType="com.leo.job.model.TaskError">
+		<selectKey keyProperty="id" order="AFTER" resultType="Long">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into cn_task_error (exceptionInfo, runTime, failTime,
+		taskInsId, exceptionType, recoverFlag, remark)
+		values (#{exceptionInfo,jdbcType=VARCHAR}, #{runTime,jdbcType=TIMESTAMP}, #{failTime,jdbcType=TIMESTAMP},
+		#{taskInsId,jdbcType=INTEGER}, #{exceptionType,jdbcType=TINYINT}, #{recoverFlag,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR})
+	</insert>
+
+	<select id="queryTaskError" resultMap="BaseResultMap" parameterType="Short">
+		select * from cn_task_error where recoverFlag = 0 and exceptionType = #{exceptionType,jdbcType=TINYINT}
+	</select>
+
+	<select id="queryOtherTaskError" resultMap="BaseResultMap"
+			parameterType="Short">
+		select e.* from cn_task_error e LEFT JOIN cn_task_instance i on i.id = e.taskInsId where i.taskType = #{taskType,jdbcType=TINYINT} and e.recoverFlag = 0 and e.exceptionType = -1
+	</select>
+
+	<select id="queryTaskErrorByDateAndType" resultMap="BaseResultMap" parameterType="map">
+		select e.* from cn_task_error e LEFT JOIN cn_task_instance i on e.taskInsId = i.id where extract(year from e.failTime) = #{year} and extract(month from e.failTime) = #{month} and extract(day from e.failTime) = #{day} and e.exceptionType = #{exceptionType} and i.taskCode = #{taskCode}
+	</select>
+
+	<select id="queryErrorTaskDate" resultMap="BaseResultMap" parameterType="map">
+		SELECT min(id) as id, min(exceptionInfo) as exceptionInfo, DATE_FORMAT(runTime, "%Y-%m-%d 00:00:00") as runTime, min(failTime) as failTime, min(taskInsId) as taskInsId, min(exceptionType) as exceptionType, min(recoverFlag) as recoverFlag, min(remark) as remark
+		FROM cn_task_error
+		WHERE taskInsId IN (
+		SELECT id
+		FROM cn_task_instance
+		WHERE taskCode = #{taskCode,jdbcType=VARCHAR}) AND DATE_FORMAT(runTime, "%Y-%m-%d 00:00:00") NOT IN (
+		SELECT DATE_FORMAT(runTime, "%Y-%m-%d 00:00:00")
+		FROM cn_task_error
+		WHERE taskInsId IN (
+		SELECT id
+		FROM cn_task_instance
+		WHERE taskCode = #{taskCode,jdbcType=VARCHAR}) AND exceptionType = 0
+		GROUP BY DATE_FORMAT(runTime, "%Y-%m-%d 00:00:00"))
+		GROUP BY DATE_FORMAT(runTime, "%Y-%m-%d 00:00:00")
+	</select>
+</mapper>

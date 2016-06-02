@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.leo.job.model.TaskDef">
+	<resultMap id="BaseResultMap" type="com.leo.job.model.TaskDef">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="taskName" property="taskName" jdbcType="VARCHAR" />
+		<result column="algorithm" property="algorithm" jdbcType="VARCHAR" />
+		<result column="taskType" property="taskType" jdbcType="TINYINT" />
+		<result column="privateFlag" property="privateFlag" jdbcType="TINYINT" />
+
+	</resultMap>
+	<select id="queryTaskDefList" resultMap="BaseResultMap">
+		select * from cn_task_def
+	</select>
+
+	<select id="queryTaskDefById" resultMap="BaseResultMap" parameterType="Long" >
+		select * from cn_task_def where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<insert id="insert" useGeneratedKeys="true" parameterType="com.leo.job.model.TaskDef">
+		<selectKey keyProperty="id" order="AFTER" resultType="Long">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into cn_task_def (taskName, algorithm, taskType, privateFlag)
+		values (#{taskName,jdbcType=VARCHAR}, #{algorithm,jdbcType=VARCHAR}, #{taskType,jdbcType=TINYINT}, #{privateFlag,jdbcType=TINYINT})
+	</insert>
+</mapper>

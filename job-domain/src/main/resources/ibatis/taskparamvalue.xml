@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.leo.job.model.TaskParamValue">
+	<resultMap id="BaseResultMap" type="com.leo.job.model.TaskParamValue">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="taskInsId" property="taskInsId" jdbcType="INTEGER" />
+		<result column="paramName" property="paramName" jdbcType="VARCHAR" />
+		<result column="paramVal" property="paramVal" jdbcType="VARCHAR" />
+		<result column="paramType" property="paramType" jdbcType="TINYINT" />
+	</resultMap>
+
+	<insert id="insert" useGeneratedKeys="true" parameterType="com.leo.job.model.TaskParamValue">
+		<selectKey keyProperty="id" order="AFTER" resultType="Long">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into cn_task_param (taskInsId, paramName, paramVal, paramType)
+		values (#{taskInsId,jdbcType=INTEGER}, #{paramName,jdbcType=VARCHAR}, #{paramVal,jdbcType=VARCHAR}, #{paramType,jdbcType=TINYINT})
+	</insert>
+
+	<select id="queryTaskParamValuesByTaskInsId" resultMap="BaseResultMap" parameterType="Long">
+		select * from cn_task_param where taskInsId = #{taskInsId,jdbcType=INTEGER}
+	</select>
+
+	<update id="updateTaskParam" parameterType="com.leo.job.model.TaskParamValue" >
+		update cn_task_param
+		<set>
+			<if test="taskInsId != null">
+				taskInsId = #{taskInsId,jdbcType=INTEGER},
+			</if>
+			<if test="paramName != null">
+				paramName = #{paramName,jdbcType=VARCHAR},
+			</if>
+			<if test="paramVal != null">
+				paramVal = #{paramVal,jdbcType=VARCHAR},
+			</if>
+			<if test="paramType != null">
+				paramType = #{paramType,jdbcType=TINYINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<delete id="deleteTaskParamById" parameterType="Long" >
+		delete from cn_task_param where id = #{id,jdbcType=INTEGER}
+	</delete>
+</mapper>

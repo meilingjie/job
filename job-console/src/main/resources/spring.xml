@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:util="http://www.springframework.org/schema/util"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xsi:schemaLocation="
+			http://www.springframework.org/schema/beans
+			http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+			http://www.springframework.org/schema/tx
+			http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+			http://www.springframework.org/schema/context
+			http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		    http://www.springframework.org/schema/aop
+       	    http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+			http://www.springframework.org/schema/util
+			http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+
+	<context:property-placeholder properties-ref="projectConfigurer"/>
+	<util:properties id="projectConfigurer" location="file:/Users/leo/work/workspace_github/job/job-console/src/main/config/application.properties" />
+
+	<!-- 启用注解功能,这里特意exclude(排除)掉springmvc中的注解，方便解耦，springmvc的注解支持在springmvc.xml中的配置 -->
+	<context:component-scan base-package="com.leo.**.services.impl,com.leo.**.task,com.leo.**.repositories.impl">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+
+	<bean id="dataSource_master" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${database.driver}"/>
+		<property name="url" value="${database.url}"/>
+		<property name="username" value="${database.user}"/>
+		<property name="password" value="${database.password}"/>
+		<property name="initialSize" value="5"/>
+		<property name="minIdle" value="5"/>
+		<property name="maxIdle" value="20"/>
+		<property name="maxActive" value="100"/>
+		<property name="maxWait" value="100000"/>
+		<property name="defaultAutoCommit" value="false"/>
+		<property name="removeAbandoned" value="true"/>
+		<property name="removeAbandonedTimeout" value="1200"/>
+		<property name="testWhileIdle" value="true"/>
+		<property name="timeBetweenEvictionRunsMillis" value="60000"/>
+		<property name="numTestsPerEvictionRun" value="20"/>
+		<property name="minEvictableIdleTimeMillis" value="300000"/>
+	</bean>
+
+	<bean id="dataSource_slave" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${database_slave.driver}"/>
+		<property name="url" value="${database_slave.url}"/>
+		<property name="username" value="${database_slave.user}"/>
+		<property name="password" value="${database_slave.password}"/>
+		<property name="initialSize" value="5"/>
+		<property name="minIdle" value="5"/>
+		<property name="maxIdle" value="20"/>
+		<property name="maxActive" value="100"/>
+		<property name="maxWait" value="100000"/>
+		<property name="defaultAutoCommit" value="false"/>
+		<property name="removeAbandoned" value="true"/>
+		<property name="removeAbandonedTimeout" value="1200"/>
+		<property name="testWhileIdle" value="true"/>
+		<property name="timeBetweenEvictionRunsMillis" value="60000"/>
+		<property name="numTestsPerEvictionRun" value="20"/>
+		<property name="minEvictableIdleTimeMillis" value="300000"/>
+	</bean>
+
+	<bean id="multipleDataSource" class="com.leo.job.repositories.support.MultipleDataSource">
+		<property name="defaultTargetDataSource" ref="dataSource_master"/>
+		<property name="targetDataSources">
+			<map>
+				<!-- 注意这里的value是和上面的DataSource的id对应，key要和下面的CustomerContextHolder中的常量对应 -->
+				<entry value-ref="dataSource_master" key="ds_m"/>
+				<entry value-ref="dataSource_slave" key="ds_s"/>
+			</map>
+		</property>
+	</bean>
+
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="multipleDataSource" />
+		<property name="configLocation" value="classpath:ibatis.xml"/>
+		<property name="mapperLocations" value="classpath*:ibatis/*.xml"/>
+	</bean>
+
+	<bean name="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="multipleDataSource"></property>
+	</bean>
+
+	<!-- 使用annotation定义事务 -->
+	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" order="0"/>
+	<aop:config>
+		<aop:advisor pointcut="execution(* *..services.*Service.*(..))" advice-ref="transactionInterceptor" order="1"/>
+	</aop:config>
+	<tx:advice id="transactionInterceptor" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="find*" read-only="true"/>
+			<tx:method name="list*" read-only="true"/>
+			<tx:method name="search*" read-only="true"/>
+			<tx:method name="query*" read-only="true"/>
+			<tx:method name="get*" read-only="true"/>
+			<tx:method name="*" propagation="REQUIRED" rollback-for="Exception"/>
+		</tx:attributes>
+	</tx:advice>
+
+	<!-- post-processors for all standard config annotations，启用注解:@ Resource 、@ PostConstruct、@ PreDestroy、@PersistenceContext、@Required -->
+	<context:annotation-config />
+
+</beans>

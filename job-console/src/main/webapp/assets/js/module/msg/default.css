@@ -1,0 +1,75 @@
+/*!
+ * @for jquery.msg.js default.css
+ * @author ydr.me
+ * @version 1.1
+ */
+
+
+/**
+ * v1.0
+ * 2013年10月2日16:05:35;
+ *
+ * v1.1
+ * 2014年3月18日21:59:25;
+ * 扩大了字体和内边距以及外阴影
+ */
+
+
+@charset "utf-8";
+
+.jquery_msg____ {
+	position: fixed;
+	top: 0;
+	left: 0;
+	margin: 0;
+	padding: 0;
+	font-size: 12px;
+	line-height: 20px;
+	min-height: 20px;
+	max-width: 320px;
+	z-index: 9999;
+	border-radius: 3px;
+	color: #fff;
+	box-shadow: 0 0 10px #666;
+}
+
+.jquery_msg____body {
+	padding: 10px 20px;
+}
+
+.jquery_msg____inverse {
+	background: #444;
+	border: 1px solid #666;
+	text-shadow: 0 1px 0 #000;
+}
+
+.jquery_msg____muted {
+	background: #DBDBDB;
+	border: 1px solid #C2C2C2;
+	text-shadow: 0 1px 0 #E9E9E9;
+	color: #6B6B6B;
+}
+
+.jquery_msg____success {
+	background: #0096ff;
+	border: 1px solid #0096ff;
+	text-shadow: 0 1px 0 #076B07;
+}
+
+.jquery_msg____info {
+	background: #19A0C9;
+	border: 1px solid #2193B4;
+	text-shadow: 0 1px 0 #036A8A;
+}
+
+.jquery_msg____error {
+	background: #BE2D29;
+	border: 1px solid #AC221E;
+	text-shadow: 0 1px 0 #8B0A07;
+}
+
+.jquery_msg____warning {
+	background: #E78E2D;
+	border: 1px solid #CF8823;
+	text-shadow: 0 1px 0 #AA6B0C;
+}

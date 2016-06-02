@@ -1,0 +1,26 @@
+@charset "utf-8";
+
+.font_common {
+	color: #676767;
+}
+.font-commondark{
+	color: #606060;
+}
+/*1级文字颜色*/
+.font_lv1 {
+	color: #0096ff;
+	/* font-size:22px; */
+}
+/*2级文字颜色*/
+.font_lv2_1 {
+	color: #eb6100;
+}
+/*3级文字颜色*/
+.font_lv2_2 {
+	color: #22ac38;
+}
+
+/*4级文字颜色*/
+.font_lv2_3 {
+	color: #0096ff;
+}
